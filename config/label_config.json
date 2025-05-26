@@ -1,0 +1,80 @@
+{
+    "page_size": "A4",
+    "margin_top": 5,
+    "margin_bottom": 5,
+    "margin_left": 5,
+    "margin_right": 5,    
+    "columns": 2,
+    "rows": 8,
+    "label_width": 95,
+    "label_height": 30,
+    "fonts": {
+        "title": {
+            "name": "Helvetica-Bold",
+            "size": 10
+        },
+        "body": {
+            "name": "Helvetica",
+            "size": 9
+        },
+        "annotation_font": {
+            "name": "Helvetica-Oblique",
+            "size": 8
+        },
+        "cjk": {
+            "name": "SimSun",
+            "file": "SimSun.ttf",
+            "size": 9
+        }
+    },
+    "colors": {
+        "text": "#000000",
+        "border": "#000000",
+        "title": "#000000",
+        "body": "#000000"
+    },
+    "show_border": true,
+    "border_width": 0.1,
+    "category_map": {
+	"C_sample": "Sample"
+    },
+    "status_map": {
+	"99": "Sample"
+    },
+    "mail_zone_map": {
+	"99": "Sample"
+    },
+    "publication_options_map": {
+        "News Letter": {"data_columns": ["NL"], "label_codes": ["NL"]},
+        "50 Years special": {"data_columns": ["50yrs"], "label_codes": ["50yrs"]}
+    },
+    "all_fields_info": [
+        {"key": "TITLE1", "label": "Title", "default": 1, "group": "recipient"},
+        {"key": "NAME1", "label": "First Name", "default": 1, "group": "recipient"},
+        {"key": "surname", "label": "Last Name", "default": 1, "group": "recipient"},
+        {"key": "post", "label": "Post", "default": 1, "group": "recipient"},
+        {"key": "co_name", "label": "Organisation", "default": 1, "group": "address"},
+        {"key": "co_name_chi", "label": "Organisation (Chinese)", "default": 0, "group": "address"},
+        {"key": "UNIT_NAME", "label": "Unit Name", "default": 0, "group": "address"},
+        {"key": "unit_name_chi", "label": "Unit Name (Chinese)", "default": 0, "group": "address"},
+        {"key": "sub_unit", "label": "Sub Unit", "default": 0, "group": "address"},
+        {"key": "sub_unit_chi", "label": "Sub Unit (Chinese)", "default": 0, "group": "address"},
+        {"key": "add1", "label": "Address Line 1", "default": 1, "group": "address"},
+        {"key": "add2", "label": "Address Line 2", "default": 1, "group": "address"},
+        {"key": "state", "label": "Address Line 3 / State / Country", "default": 1, "group": "address"}
+    ],
+    "custom_right_panel_text": "",
+    "display_selected_fields_on_label": [
+        "TITLE1", 
+        "NAME1", 
+        "surname", 
+        "post", 
+        "co_name", 
+        "add1", 
+        "add2", 
+        "state"
+    ],
+    "display_publication_codes_on_label": [],
+    "bulletin_text": "Bulletin",
+    "bulletin_number_text": "No.X-YYYY"
+}
