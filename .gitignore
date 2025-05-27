@@ -3,8 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-.github/workflows/build.yml
-
 # C extensions
 *.so
 
