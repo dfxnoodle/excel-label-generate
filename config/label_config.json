@@ -1,14 +1,18 @@
 {
     "page_size": "A4",
-    "margin_top": 5,
-    "margin_bottom": 5,
-    "margin_left": 5,
-    "margin_right": 5,    
+    "margin_top": 1,
+    "margin_bottom": 1,
+    "margin_left": 3,
+    "margin_right": 3,
     "columns": 2,
     "rows": 8,
     "label_width": 95,
     "label_height": 30,
     "fonts": {
+        "header": {
+            "name": "Helvetica-Bold",
+            "size": 12
+        },
         "title": {
             "name": "Helvetica-Bold",
             "size": 10
@@ -17,64 +21,224 @@
             "name": "Helvetica",
             "size": 9
         },
-        "annotation_font": {
-            "name": "Helvetica-Oblique",
+        "footer": {
+            "name": "Helvetica",
             "size": 8
         },
         "cjk": {
             "name": "SimSun",
-            "file": "SimSun.ttf",
-            "size": 9
+            "size": 9,
+            "file": "SimSun.ttf"
+        },
+        "annotation_font": {
+            "name": "Helvetica",
+            "size": 8
         }
     },
     "colors": {
-        "text": "#000000",
-        "border": "#000000",
+        "header": "#000000",
         "title": "#000000",
-        "body": "#000000"
+        "body": "#000000",
+        "border": "#000000",
+        "text": "#000000"
     },
-    "show_border": true,
+    "show_border": false,
     "border_width": 0.1,
+    "bulletin_text": "Bulletin",
+    "bulletin_number_text": "No.2-2025",
+    "custom_right_panel_text": "E",
     "category_map": {
-	"C_sample": "Sample"
+        "C_acd": "Academic Units",
+        "C_acd_dept": "Academic Units_departments",
+        "C_acd_oths": "Other Academic Units",
+        "C_acd_prof": "Academic Units_profs-at-large",
+        "C_adm_sev": "Professional Administrative and Services Units",
+        "C_can": "Canteens",
+        "C_col": "Colleges",
+        "C_fac": "Facilities",
+        "C_hst": "Student Hostels",
+        "C_jrsh": "Joint Research Units",
+        "C_mgt": "University Management Units",
+        "C_mgt_offr": "University Officers",
+        "C_org": "Staff Organizations",
+        "C_rsh": "Research Units",
+        "C_rsh_ctr": "Research Centre",
+        "C_rsh_inst": "Research Institute",
+        "C_rsh_key": "State Key Laboratories",
+        "C_su": "Student Unions"
     },
     "status_map": {
-	"99": "Sample"
+        "1": "CU Admin Units/Academic Depts/Research Centres",
+        "2": "Units Other than CU Departments/Units",
+        "3": "CU-related Individual/Special Order",
+        "4": "Council Members",
+        "5": "Emeritus Professors",
+        "6": "Honorary Graduates",
+        "7": "College Trustees",
+        "8": "Advisory Boards/Committees",
+        "9": "College Donors",
+        "10": "Newsletter as request / Subscription",
+        "11": "Government",
+        "12": "Local Culture",
+        "13": "Local Individuals",
+        "15": "Local Tertiary",
+        "17": "Overseas Individuals",
+        "18": "Special Request (local/overseas)",
+        "19": "Secondary School (principle + student union)",
+        "20": "Overseas Culture",
+        "21": "Overseas Tertiary",
+        "22": "LegCo Members (AR only)",
+        "23": "ExeCo Members (AR only)",
+        "24": "Education Commission Members (AR only)",
+        "26": "Consulates (AR only)",
+        "27": "Honorary Fellows",
+        "90": "Alumni"
     },
     "mail_zone_map": {
-	"99": "Sample"
+        "1": "Internal circulation",
+        "2": "Hong Kong Island",
+        "3": "Kowloon, NT",
+        "4": "China, Taiwan, Macau",
+        "5": "All others"
     },
     "publication_options_map": {
-        "News Letter": {"data_columns": ["NL"], "label_codes": ["NL"]},
-        "50 Years special": {"data_columns": ["50yrs"], "label_codes": ["50yrs"]}
+        "Annual Report (English Only)": {
+            "data_columns": [
+                "AR"
+            ],
+            "label_codes": [
+                "AR"
+            ]
+        },
+        "Bulletin (English Only)": {
+            "data_columns": [
+                "BE"
+            ],
+            "label_codes": [
+                "BE"
+            ]
+        },
+        "Bulletin (Chinese Only)": {
+            "data_columns": [
+                "BC"
+            ],
+            "label_codes": [
+                "BC"
+            ]
+        },
+        "Bulletin (Chinese & English)": {
+            "data_columns": [
+                "BEC"
+            ],
+            "label_codes": [
+                "BEC"
+            ]
+        },
+        "Facts and Figures (English Only)": {
+            "data_columns": [
+                "FFE"
+            ],
+            "label_codes": [
+                "FFE"
+            ]
+        },
+        "Facts and Figures (Chinese Only)": {
+            "data_columns": [
+                "FFC"
+            ],
+            "label_codes": [
+                "FFC"
+            ]
+        }
     },
     "all_fields_info": [
-        {"key": "TITLE1", "label": "Title", "default": 1, "group": "recipient"},
-        {"key": "NAME1", "label": "First Name", "default": 1, "group": "recipient"},
-        {"key": "surname", "label": "Last Name", "default": 1, "group": "recipient"},
-        {"key": "post", "label": "Post", "default": 1, "group": "recipient"},
-        {"key": "co_name", "label": "Organisation", "default": 1, "group": "address"},
-        {"key": "co_name_chi", "label": "Organisation (Chinese)", "default": 0, "group": "address"},
-        {"key": "UNIT_NAME", "label": "Unit Name", "default": 0, "group": "address"},
-        {"key": "unit_name_chi", "label": "Unit Name (Chinese)", "default": 0, "group": "address"},
-        {"key": "sub_unit", "label": "Sub Unit", "default": 0, "group": "address"},
-        {"key": "sub_unit_chi", "label": "Sub Unit (Chinese)", "default": 0, "group": "address"},
-        {"key": "add1", "label": "Address Line 1", "default": 1, "group": "address"},
-        {"key": "add2", "label": "Address Line 2", "default": 1, "group": "address"},
-        {"key": "state", "label": "Address Line 3 / State / Country", "default": 1, "group": "address"}
+        {
+            "key": "TITLE1",
+            "label": "Title",
+            "default": 1,
+            "group": "recipient"
+        },
+        {
+            "key": "NAME1",
+            "label": "Name",
+            "default": 1,
+            "group": "recipient"
+        },
+        {
+            "key": "surname",
+            "label": "Surname",
+            "default": 1,
+            "group": "recipient"
+        },
+        {
+            "key": "post",
+            "label": "Post",
+            "default": 0,
+            "group": "recipient"
+        },
+        {
+            "key": "co_name",
+            "label": "Company Name",
+            "default": 0,
+            "group": "address"
+        },
+        {
+            "key": "co_name_chi",
+            "label": "Company Name (Chi)",
+            "default": 0,
+            "group": "address"
+        },
+        {
+            "key": "UNIT_NAME",
+            "label": "Unit Name",
+            "default": 0,
+            "group": "address"
+        },
+        {
+            "key": "unit_name_chi",
+            "label": "Unit Name (Chi)",
+            "default": 0,
+            "group": "address"
+        },
+        {
+            "key": "sub_unit",
+            "label": "Sub Unit",
+            "default": 0,
+            "group": "address"
+        },
+        {
+            "key": "sub_unit_chi",
+            "label": "Sub Unit (Chi)",
+            "default": 0,
+            "group": "address"
+        },
+        {
+            "key": "add1",
+            "label": "Address 1",
+            "default": 1,
+            "group": "address"
+        },
+        {
+            "key": "add2",
+            "label": "Address 2",
+            "default": 1,
+            "group": "address"
+        },
+        {
+            "key": "state",
+            "label": "State/Country",
+            "default": 1,
+            "group": "address"
+        }
     ],
-    "custom_right_panel_text": "",
     "display_selected_fields_on_label": [
-        "TITLE1", 
-        "NAME1", 
-        "surname", 
-        "post", 
-        "co_name", 
-        "add1", 
-        "add2", 
+        "TITLE1",
+        "NAME1",
+        "surname",
+        "post",
+        "UNIT_NAME",
+        "add1",
+        "add2",
         "state"
-    ],
-    "display_publication_codes_on_label": [],
-    "bulletin_text": "Bulletin",
-    "bulletin_number_text": "No.X-YYYY"
+    ]
 }

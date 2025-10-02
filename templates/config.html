@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Label Configuration - Label Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Label Configuration</h1>
+            <a href="/" class="btn btn-secondary">← Back to Main</a>
+        </div>
+        
+        <!-- Page Layout Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Page Layout</h3>
+            </div>
+            <div class="card-body">
+                <form id="layoutForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="pageSize" class="form-label">Page Size</label>
+                                <select class="form-control" id="pageSize">
+                                    <option value="A4">A4</option>
+                                    <option value="Letter">Letter</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="columns" class="form-label">Columns</label>
+                                <input type="number" class="form-control" id="columns" min="1" max="10">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="rows" class="form-label">Rows</label>
+                                <input type="number" class="form-control" id="rows" min="1" max="20">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="showBorder" class="form-label">Show Border</label>
+                                <select class="form-control" id="showBorder">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="labelWidth" class="form-label">Label Width (mm)</label>
+                                <input type="number" class="form-control" id="labelWidth" min="10" max="200">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="labelHeight" class="form-label">Label Height (mm)</label>
+                                <input type="number" class="form-control" id="labelHeight" min="10" max="100">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="borderWidth" class="form-label">Border Width</label>
+                                <input type="number" class="form-control" id="borderWidth" step="0.1" min="0" max="2">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="marginTop" class="form-label">Top Margin (mm)</label>
+                                <input type="number" class="form-control" id="marginTop" min="0" max="50">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="marginBottom" class="form-label">Bottom Margin (mm)</label>
+                                <input type="number" class="form-control" id="marginBottom" min="0" max="50">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="marginLeft" class="form-label">Left Margin (mm)</label>
+                                <input type="number" class="form-control" id="marginLeft" min="0" max="50">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="marginRight" class="form-label">Right Margin (mm)</label>
+                                <input type="number" class="form-control" id="marginRight" min="0" max="50">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Font Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Font Settings</h3>
+            </div>
+            <div class="card-body">
+                <form id="fontForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Title Font</h5>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="titleFontName" class="form-label">Font Name</label>
+                                        <select class="form-control" id="titleFontName">
+                                            <option value="Helvetica">Helvetica</option>
+                                            <option value="Helvetica-Bold">Helvetica Bold</option>
+                                            <option value="Times-Roman">Times Roman</option>
+                                            <option value="Times-Bold">Times Bold</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="titleFontSize" class="form-label">Size</label>
+                                        <input type="number" class="form-control" id="titleFontSize" min="6" max="24">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5>Body Font</h5>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="bodyFontName" class="form-label">Font Name</label>
+                                        <select class="form-control" id="bodyFontName">
+                                            <option value="Helvetica">Helvetica</option>
+                                            <option value="Helvetica-Bold">Helvetica Bold</option>
+                                            <option value="Times-Roman">Times Roman</option>
+                                            <option value="Times-Bold">Times Bold</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="bodyFontSize" class="form-label">Size</label>
+                                        <input type="number" class="form-control" id="bodyFontSize" min="6" max="24">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>CJK Font (Chinese Characters)</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="cjkFontName" class="form-label">Font Name</label>
+                                        <input type="text" class="form-control" id="cjkFontName" placeholder="SimSun">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="cjkFontSize" class="form-label">Size</label>
+                                        <input type="number" class="form-control" id="cjkFontSize" min="6" max="24">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="cjkFontFile" class="form-label">Font File</label>
+                                        <input type="text" class="form-control" id="cjkFontFile" placeholder="SimSun.ttf">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5>Annotation Font</h5>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="annotationFontName" class="form-label">Font Name</label>
+                                        <select class="form-control" id="annotationFontName">
+                                            <option value="Helvetica">Helvetica</option>
+                                            <option value="Helvetica-Oblique">Helvetica Oblique</option>
+                                            <option value="Times-Roman">Times Roman</option>
+                                            <option value="Times-Italic">Times Italic</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="annotationFontSize" class="form-label">Size</label>
+                                        <input type="number" class="form-control" id="annotationFontSize" min="6" max="24">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Color Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Color Settings</h3>
+            </div>
+            <div class="card-body">
+                <form id="colorForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="textColor" class="form-label">Text Color</label>
+                                <input type="color" class="form-control" id="textColor">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="titleColor" class="form-label">Title Color</label>
+                                <input type="color" class="form-control" id="titleColor">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="bodyColor" class="form-label">Body Color</label>
+                                <input type="color" class="form-control" id="bodyColor">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="borderColor" class="form-label">Border Color</label>
+                                <input type="color" class="form-control" id="borderColor">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Field Display Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Field Display Settings</h3>
+            </div>
+            <div class="card-body">
+                <form id="fieldsForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Fields to Display on Label</h5>
+                            <div id="fieldCheckboxes">
+                                <!-- Checkboxes will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Custom Text Settings</h5>
+                            <div class="mb-3">
+                                <label for="bulletinText" class="form-label">Bulletin Text</label>
+                                <input type="text" class="form-control" id="bulletinText" placeholder="Bulletin">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bulletinNumber" class="form-label">Bulletin Number</label>
+                                <input type="text" class="form-control" id="bulletinNumber" placeholder="No.X-YYYY">
+                            </div>
+                            <div class="mb-3">
+                                <label for="customRightPanel" class="form-label">Custom Right Panel Text</label>
+                                <textarea class="form-control" id="customRightPanel" rows="3" placeholder="Enter custom text for right panel"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <button type="button" class="btn btn-primary btn-lg me-3" id="saveConfigBtn">
+                    Save Configuration
+                </button>
+                <button type="button" class="btn btn-secondary me-3" id="loadConfigBtn">
+                    Reload from File
+                </button>
+                <button type="button" class="btn btn-warning" id="resetConfigBtn">
+                    Reset to Defaults
+                </button>
+                <div id="configResult" class="mt-3"></div>
+            </div>
+        </div>
+        
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Processing...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/config.js"></script>
+</body>
+</html>

@@ -152,7 +152,8 @@ def create_label(c, data, x, y, width, height, config=None):
     if config is None:
         config = load_config()
 
-    selected_fields = config.get("selected_fields_for_label")
+    # Get selected fields - check both possible key names for backwards compatibility
+    selected_fields = config.get("display_selected_fields_on_label") or config.get("selected_fields_for_label")
     
     # Get font and color configurations
     fonts_config = config.get("fonts", {})
@@ -209,6 +210,9 @@ def create_label(c, data, x, y, width, height, config=None):
     body_color = hex_to_color(body_color_hex)
     border_color = hex_to_color(border_color_hex)
     
+    # Calculate divider position (used for layout even if border is not shown)
+    divider_x = x + (width * 0.75)
+    
     # Draw border if specified
     if config.get("show_border", True):
         border_width = config.get("border_width", 0.5)
@@ -217,7 +221,6 @@ def create_label(c, data, x, y, width, height, config=None):
         c.rect(x, y, width, height)
         
         # Draw vertical divider at around 75% of width
-        divider_x = x + (width * 0.75)
         c.line(divider_x, y, divider_x, y + height)
     
     # Standard padding
@@ -350,8 +353,8 @@ def create_label(c, data, x, y, width, height, config=None):
     final_right_text = custom_right_text
 
     if display_codes_on_label: # This should be a list like ["BE"] or ["AE"]
-        code_to_display = None
-        issue_count = None
+        # Collect ALL publications that have copies (instead of just the first one)
+        publications_with_copies = []
 
         # Iterate through the codes provided for display on the label
         for code_key in display_codes_on_label:
@@ -361,22 +364,20 @@ def create_label(c, data, x, y, width, height, config=None):
                 try:
                     val = int(data[code_key])
                     if val >= 1:
-                        issue_count = val
-                        code_to_display = code_key # Use the data column name as the code to display
-                        break 
+                        publications_with_copies.append(f"{val} {code_key}")
                 except (ValueError, TypeError):
                     continue
 
-        if issue_count is not None and code_to_display is not None:
-            # Only add a space before custom_right_text if custom_right_text is not empty
-            prefix = f"{issue_count} {code_to_display}"
+        if publications_with_copies:
+            # Join all publications with " + " separator
+            prefix = " + ".join(publications_with_copies)
             if custom_right_text:
                 final_right_text = f"{prefix} {custom_right_text}"
             else:
                 final_right_text = prefix
         # If no specific issue count found, and custom_right_text is empty, final_right_text remains empty.
         # If custom_right_text has content (e.g. "E"), it will be used.
-        elif not custom_right_text: # if issue_count is None and custom_right_text is empty
+        elif not custom_right_text: # if no publications found and custom_right_text is empty
              final_right_text = "" # Ensure it's an empty string, not None
 
     text_width = c.stringWidth(final_right_text, 
@@ -402,6 +403,10 @@ def create_label(c, data, x, y, width, height, config=None):
     # Get bulletin texts from config, with fallbacks
     bulletin_text = str(config.get("bulletin_text", "Bulletin")) # Ensure string
     bulletin_number_text = str(config.get("bulletin_number_text", "No.2-2026")) # Ensure string
+    
+    # The bulletin number should always show the configured value (e.g., "No.2-2026")
+    # We don't need to show copy counts at the bottom since they're already shown in the center panel
+    # when display_publication_codes_on_label is set
 
     bulletin_width = c.stringWidth(bulletin_text, bulletin_font_name, bulletin_font_size)
     bulletin_x = right_center_x - (bulletin_width / 2)
@@ -548,13 +553,25 @@ def load_config(config_file=None):
                 else:
                     # For other types or if key not in defaults as dict, just overwrite
                     merged_config[key] = value
+            
+            # Initialize display_selected_fields_on_label if not present
+            if "display_selected_fields_on_label" not in merged_config and "all_fields_info" in merged_config:
+                # Get default fields (where default == 1)
+                merged_config["display_selected_fields_on_label"] = [
+                    field["key"] for field in merged_config["all_fields_info"] if field.get("default") == 1
+                ]
+            
             return merged_config
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON from {config_file}: {e}")
             # Fallback to default_config if JSON is invalid
             return default_config
     else:
-        # No config file provided or found, return defaults
+        # No config file provided or found, return defaults with initialized display fields
+        if "display_selected_fields_on_label" not in default_config and "all_fields_info" in default_config:
+            default_config["display_selected_fields_on_label"] = [
+                field["key"] for field in default_config["all_fields_info"] if field.get("default") == 1
+            ]
         return default_config
 
 

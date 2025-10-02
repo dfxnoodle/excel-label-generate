@@ -12,6 +12,30 @@ import pandas as pd
 from simple_labels import load_data_from_excel, generate_labels, load_config
 
 
+def filter_data(records, filters):
+    """Filter records based on provided filters."""
+    if not filters:
+        return records
+    
+    filtered_records = []
+    for record in records:
+        match = True
+        for key, value in filters.items():
+            if key in record and str(record[key]) != str(value):
+                match = False
+                break
+        if match:
+            filtered_records.append(record)
+    
+    return filtered_records
+
+
+def create_label_batch(records, batch_size, start_index=0):
+    """Create a batch of records for processing."""
+    end_index = start_index + batch_size
+    return records[start_index:end_index]
+
+
 def parse_args():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Generate labels from Excel data.")
@@ -84,7 +108,7 @@ def main():
     args = parse_args()
     
     # Load configuration
-    config = load_label_config(args.config)
+    config = load_config(args.config)
     
     # Ensure output directory exists
     output_dir = os.path.dirname(args.output)
@@ -118,7 +142,7 @@ def main():
         records = batched_records
     
     # Generate labels
-    generate_labels(records, args.template, args.output)
+    generate_labels(records, args.output, config_file=args.config)
 
 
 if __name__ == "__main__":
