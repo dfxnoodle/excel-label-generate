@@ -14,7 +14,33 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup dropdown handlers
     setupDropdownHandlers();
+    
+    // Setup filter mode toggle handlers
+    setupFilterModeToggle();
 });
+
+function setupFilterModeToggle() {
+    const orRadio = document.getElementById('filterModeOr');
+    const andRadio = document.getElementById('filterModeAnd');
+    const orDesc = document.getElementById('orModeDesc');
+    const andDesc = document.getElementById('andModeDesc');
+    
+    if (orRadio && andRadio) {
+        orRadio.addEventListener('change', function() {
+            if (this.checked) {
+                orDesc.style.display = '';
+                andDesc.style.display = 'none';
+            }
+        });
+        
+        andRadio.addEventListener('change', function() {
+            if (this.checked) {
+                orDesc.style.display = 'none';
+                andDesc.style.display = '';
+            }
+        });
+    }
+}
 
 function setupDropdownHandlers() {
     // Category filter dropdown
@@ -260,6 +286,10 @@ function getConfigFromForm() {
     
     const mailZoneFilter = document.getElementById('mailZoneFilter').value.trim();
     if (mailZoneFilter) config.mail_zone_filter = mailZoneFilter;
+    
+    // Get filter mode (OR or AND)
+    const filterMode = document.querySelector('input[name="filterMode"]:checked')?.value || 'OR';
+    config.filter_mode = filterMode;
     
     // Get selected publication columns
     const publicationColumns = [];

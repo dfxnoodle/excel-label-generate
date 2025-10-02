@@ -43,6 +43,7 @@ class LabelConfig(BaseModel):
     status_filter: Optional[str] = None
     status_exclude_filter: Optional[str] = None
     mail_zone_filter: Optional[str] = None
+    filter_mode: Optional[str] = "OR"  # "OR" or "AND"
     publication_columns: Optional[List[str]] = None
     limit: Optional[int] = None
     start_index: int = 0
@@ -102,10 +103,13 @@ async def upload_excel_file(file: UploadFile = File(...)):
         sample_data = df.head(3).to_dict(orient='records')
         clean_sample_data = clean_data_for_json(sample_data)
         
+        # Count only non-empty rows (rows that have at least one non-null value)
+        non_empty_rows = df.dropna(how='all').shape[0]
+        
         return {
             "message": f"File '{file.filename}' uploaded successfully",
             "filename": file.filename,
-            "rows": len(df),
+            "rows": non_empty_rows,
             "columns": list(df.columns[:10]),  # Show first 10 columns as preview
             "sample_data": clean_sample_data  # Show first 3 rows
         }
@@ -144,7 +148,8 @@ async def export_filtered_excel(request: GenerateLabelsRequest, background_tasks
                 status_filter=config_dict.get('status_filter'),
                 status_exclude_filter=config_dict.get('status_exclude_filter'),
                 mail_zone_filter=config_dict.get('mail_zone_filter'),
-                publication_columns=config_dict.get('publication_columns')
+                publication_columns=config_dict.get('publication_columns'),
+                filter_mode=config_dict.get('filter_mode', 'OR')
             )
             
             if df is None or df.empty:
@@ -213,7 +218,8 @@ async def generate_labels_endpoint(request: GenerateLabelsRequest, background_ta
                 status_filter=config_dict.get('status_filter'),
                 status_exclude_filter=config_dict.get('status_exclude_filter'),
                 mail_zone_filter=config_dict.get('mail_zone_filter'),
-                publication_columns=config_dict.get('publication_columns')
+                publication_columns=config_dict.get('publication_columns'),
+                filter_mode=config_dict.get('filter_mode', 'OR')
             )
             
             if df is None or df.empty:

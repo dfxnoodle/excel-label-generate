@@ -16,7 +16,7 @@
         </div>
         
         <div class="d-flex justify-content-end mb-3">
-            <a href="/config-page" class="btn btn-outline-secondary">⚙️ Configuration</a>
+            <a href="/config-page" class="btn btn-outline-primary">⚙️ Configuration</a>
         </div>
         
         <!-- File Upload Section -->
@@ -56,6 +56,25 @@
                     Click the guide buttons above for detailed code references. 
                     Use Step 2.5 to export and verify your filtered data before generating labels.
                 </div>
+                
+                <!-- Filter Mode Toggle -->
+                <div class="alert alert-info border mb-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>🔍 Filter Logic Mode:</strong>
+                        <span id="filterModeDescription" class="ms-2">
+                            <span id="orModeDesc">Rows matching <strong>ANY</strong> selected status/category (e.g., C_acd OR C_mgt)</span>
+                            <span id="andModeDesc" style="display: none;">Rows matching <strong>ALL</strong> selected status/category (e.g., C_acd AND C_mgt)</span>
+                        </span>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Filter mode toggle">
+                        <input type="radio" class="btn-check" name="filterMode" id="filterModeOr" value="OR" checked autocomplete="off">
+                        <label class="btn btn-outline-primary" for="filterModeOr">OR</label>
+                        
+                        <input type="radio" class="btn-check" name="filterMode" id="filterModeAnd" value="AND" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="filterModeAnd">AND</label>
+                    </div>
+                </div>
+                
                 <form id="configForm">
                     <div class="row">
                         <div class="col-md-6">
@@ -118,7 +137,7 @@
                                     <button class="btn btn-outline-secondary" type="button" id="clearCategoryExcludeBtn">Clear</button>
                                 </div>
                                 <input type="text" class="form-control" id="categoryExcludeFilter" 
-                                       placeholder="e.g., C4,C5">
+                                       placeholder="e.g., C_acd,C_mgt">
                                 <small class="form-text text-muted">Select categories to exclude</small>
                             </div>
                             
@@ -329,7 +348,7 @@
                 <button type="button" class="btn btn-success btn-lg me-3" id="generateBtn">
                     📄 Generate Labels PDF
                 </button>
-                <a href="/config-page" class="btn btn-outline-secondary">
+                <a href="/config-page" class="btn btn-outline-primary">
                     ⚙️ Edit Configuration
                 </a>
                 <div id="generateResult" class="mt-3"></div>

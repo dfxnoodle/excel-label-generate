@@ -19,7 +19,7 @@ import json
 import os
 
 
-def load_data_from_excel(excel_file_path, category_filter=None, category_exclude_filter=None, status_filter=None, status_exclude_filter=None, mail_zone_filter=None, publication_columns=None): # Added status_exclude_filter
+def load_data_from_excel(excel_file_path, category_filter=None, category_exclude_filter=None, status_filter=None, status_exclude_filter=None, mail_zone_filter=None, publication_columns=None, filter_mode="OR"):
     """
     Load data from an Excel file using pandas.
     
@@ -32,6 +32,7 @@ def load_data_from_excel(excel_file_path, category_filter=None, category_exclude
         mail_zone_filter (str, optional): Filter for specific MAIL_ZONE.
         publication_columns (list, optional): A list of data column names (e.g. ["BE", "BC"]) to filter by.
             A row is kept if any of these columns have a positive integer value (>=1).
+        filter_mode (str, optional): "OR" or "AND". Controls whether filters require any match (OR) or all matches (AND).
         
     Returns:
         pandas.DataFrame: DataFrame containing the Excel data.
@@ -44,10 +45,16 @@ def load_data_from_excel(excel_file_path, category_filter=None, category_exclude
                 # Split the filter into individual categories
                 filter_categories = [cat.strip() for cat in category_filter.split(',')]
                 
-                # Create a mask to match rows with any of the specified categories
-                category_mask = df['category_ids'].astype(str).apply(
-                    lambda x: any(cat in [c.strip() for c in x.split(',')] for cat in filter_categories)
-                )
+                if filter_mode == "AND":
+                    # AND mode: row must contain ALL specified categories
+                    category_mask = df['category_ids'].astype(str).apply(
+                        lambda x: all(cat in [c.strip() for c in x.split(',')] for cat in filter_categories)
+                    )
+                else:
+                    # OR mode: row must contain ANY of the specified categories
+                    category_mask = df['category_ids'].astype(str).apply(
+                        lambda x: any(cat in [c.strip() for c in x.split(',')] for cat in filter_categories)
+                    )
                 df = df[category_mask]
             else:
                 print("Warning: 'category_ids' column not found in Excel sheet. Category filter not applied.")
@@ -71,10 +78,16 @@ def load_data_from_excel(excel_file_path, category_filter=None, category_exclude
                 # Split the filter into individual status IDs
                 filter_statuses = [status.strip() for status in status_filter.split(',')]
                 
-                # Create a mask to match rows with any of the specified status IDs
-                status_mask = df['status_ids'].astype(str).apply(
-                    lambda x: any(status in [s.strip() for s in x.split(',')] for status in filter_statuses)
-                )
+                if filter_mode == "AND":
+                    # AND mode: row must contain ALL specified statuses
+                    status_mask = df['status_ids'].astype(str).apply(
+                        lambda x: all(status in [s.strip() for s in x.split(',')] for status in filter_statuses)
+                    )
+                else:
+                    # OR mode: row must contain ANY of the specified statuses
+                    status_mask = df['status_ids'].astype(str).apply(
+                        lambda x: any(status in [s.strip() for s in x.split(',')] for status in filter_statuses)
+                    )
                 df = df[status_mask]
             else:
                 print("Warning: 'status_ids' column not found in Excel sheet. Status filter not applied.")
