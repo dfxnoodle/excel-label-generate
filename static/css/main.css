@@ -1,77 +1,507 @@
-/* Custom styles for the Label Generator */
+/* Custom styles for the Label Generator - Purple & Gold Theme */
 
-body {
-    background-color: #f8f9fa;
+/* Color Variables */
+:root {
+  /* Purple Variants */
+  --classic-purple: #764393;
+  --royal-purple: #5E3676;
+  --dynamic-purple: #7D2882;
+  --milky-purple: #F1ECF4;
+  --dewy-purple: #D5C5DE;
+  --light-classic-purple: #874DA8;
+
+  /* Gold Variants */
+  --champagne-gold: #F1EBDE;
+  --classic-gold: #DFD0AA;
+  --dark-classic-gold: #D1BF92;
+  --light-royal-gold: #9C885C;
+  --royal-gold: #84754E;
+  --dark-royal-gold: #635636;
+  --dynamic-gold: #F0AA23;
+
+  /* Additional Colors */
+  --beaver: #A88C8B;
+  --lilac: #A395A2;
+  --mauve: #775B7A;
+  --amethyst: #7E678F;
 }
 
+body {
+    background: linear-gradient(135deg, var(--milky-purple) 0%, var(--champagne-gold) 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Header Styling */
+.text-center.mb-4 h1 {
+    color: var(--royal-purple);
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(94, 54, 118, 0.1);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.text-center.mb-4 p {
+    color: var(--mauve);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Card Styling */
 .card {
     border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    border-radius: 0.5rem;
+    box-shadow: 0 8px 16px rgba(118, 67, 147, 0.15);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(118, 67, 147, 0.25);
 }
 
 .card-header {
-    background-color: #e9ecef;
-    border-bottom: 1px solid #dee2e6;
+    background: linear-gradient(135deg, var(--royal-purple) 0%, var(--classic-purple) 100%);
+    border-bottom: 3px solid var(--royal-gold);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
     font-weight: 600;
+    padding: 1.25rem;
 }
 
 .card-header h3 {
     margin: 0;
-    color: #495057;
+    color: white;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Button Styling */
 .btn-primary {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+    background: linear-gradient(135deg, var(--classic-purple) 0%, var(--royal-purple) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(118, 67, 147, 0.3);
 }
 
 .btn-primary:hover {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
+    background: linear-gradient(135deg, var(--royal-purple) 0%, var(--dynamic-purple) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(118, 67, 147, 0.4);
 }
 
 .btn-success {
-    background-color: #198754;
-    border-color: #198754;
+    background: linear-gradient(135deg, var(--royal-gold) 0%, var(--dynamic-gold) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(132, 117, 78, 0.3);
 }
 
 .btn-success:hover {
-    background-color: #157347;
-    border-color: #146c43;
+    background: linear-gradient(135deg, var(--dynamic-gold) 0%, var(--light-royal-gold) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(132, 117, 78, 0.4);
 }
 
 .btn-info {
-    background-color: #0dcaf0;
-    border-color: #0dcaf0;
-    color: #000;
+    background: linear-gradient(135deg, var(--amethyst) 0%, var(--lilac) 100%);
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(126, 103, 143, 0.3);
 }
 
 .btn-info:hover {
-    background-color: #31d2f2;
-    border-color: #25cff2;
-    color: #000;
+    background: linear-gradient(135deg, var(--lilac) 0%, var(--mauve) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(126, 103, 143, 0.4);
+    color: white;
 }
 
+.btn-outline-secondary {
+    border: 2px solid var(--dewy-purple);
+    color: rgb(255, 254, 254);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--dewy-purple);
+    border-color: var(--classic-purple);
+    color: rgb(255, 254, 254);
+}
+
+/* Alert Styling */
 .alert {
     border: none;
-    border-radius: 0.375rem;
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.alert-success {
+    background: linear-gradient(135deg, rgba(223, 208, 170, 0.3) 0%, rgba(241, 235, 222, 0.3) 100%);
+    border-left: 4px solid var(--royal-gold);
+    color: var(--dark-royal-gold);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, rgba(125, 40, 130, 0.1) 0%, rgba(213, 197, 222, 0.2) 100%);
+    border-left: 4px solid var(--dynamic-purple);
+    color: var(--royal-purple);
+}
+
+/* Form Styling */
 .form-label {
-    font-weight: 500;
-    color: #495057;
+    font-weight: 600;
+    color: var(--royal-purple);
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border: 2px solid var(--dewy-purple);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--classic-purple);
+    box-shadow: 0 0 0 0.2rem rgba(118, 67, 147, 0.25);
+}
+
+/* Table Styling */
+.table {
+    background-color: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
 }
 
 .table {
     background-color: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
 }
 
 .table th {
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, var(--milky-purple) 0%, var(--dewy-purple) 100%);
     border-top: none;
     font-weight: 600;
-    color: #495057;
+    color: var(--royal-purple);
+    padding: 1rem;
+}
+
+.table td {
+    padding: 0.875rem;
+    color: var(--mauve);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(241, 236, 244, 0.3);
+}
+
+#uploadResult, #generateResult, #exportResult {
+    transition: all 0.3s ease-in-out;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-color: var(--classic-purple);
+    border-right-color: transparent;
+}
+
+.file-info {
+    background: linear-gradient(135deg, rgba(241, 236, 244, 0.5) 0%, rgba(213, 197, 222, 0.3) 100%);
+    border: 2px solid var(--dewy-purple);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.file-info h5 {
+    color: var(--royal-purple);
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.file-info p {
+    color: var(--mauve);
+    margin-bottom: 0.5rem;
+}
+
+.file-info strong {
+    color: var(--classic-purple);
+}
+
+.preview-table {
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: 0.75rem;
+}
+
+.download-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--royal-gold) 0%, var(--dynamic-gold) 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(132, 117, 78, 0.3);
+}
+
+.download-link:hover {
+    background: linear-gradient(135deg, var(--dynamic-gold) 0%, var(--light-royal-gold) 100%);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(132, 117, 78, 0.4);
+}
+
+.error-message {
+    color: var(--royal-purple);
+    background: linear-gradient(135deg, rgba(125, 40, 130, 0.1) 0%, rgba(241, 236, 244, 0.3) 100%);
+    border: 2px solid var(--dynamic-purple);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.success-message {
+    color: var(--dark-royal-gold);
+    background: linear-gradient(135deg, rgba(223, 208, 170, 0.3) 0%, rgba(241, 235, 222, 0.3) 100%);
+    border: 2px solid var(--royal-gold);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+/* Multi-select dropdown styling */
+select[multiple] {
+    border: 2px solid var(--dewy-purple);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    background-color: white;
+}
+
+select[multiple] option {
+    padding: 0.75rem;
+    margin: 0.25rem 0;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    color: var(--mauve);
+}
+
+select[multiple] option:hover {
+    background-color: var(--milky-purple);
+}
+
+select[multiple] option:checked {
+    background: linear-gradient(135deg, var(--classic-purple) 0%, var(--royal-purple) 100%);
+    color: white;
+    font-weight: 600;
+}
+
+select[multiple] optgroup {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--royal-purple);
+    margin-top: 0.5rem;
+}
+
+select[multiple] optgroup option {
+    font-weight: normal;
+    padding-left: 1.5rem;
+}
+
+/* Input group styling */
+.input-group select[multiple] {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group .btn-outline-secondary {
+    border: 2px solid var(--dewy-purple);
+}
+
+.input-group .btn-outline-secondary:hover {
+    background-color: var(--milky-purple);
+    border-color: var(--dewy-purple);
+    color: var(--royal-purple);
+}
+
+/* Readonly input styling */
+input[readonly] {
+    background-color: var(--milky-purple);
+    cursor: default;
+    border-color: var(--dewy-purple);
+}
+
+/* Badge styling */
+.badge {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, var(--classic-purple) 0%, var(--royal-purple) 100%);
+}
+
+.badge-warning {
+    background: linear-gradient(135deg, var(--classic-gold) 0%, var(--dynamic-gold) 100%);
+    color: white;
+}
+
+.badge[style*="cursor: help"] {
+    transition: all 0.2s ease;
+}
+
+.badge[style*="cursor: help"]:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(118, 67, 147, 0.3);
+}
+
+/* Publication checkboxes styling */
+.form-check {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.form-check:hover {
+    background-color: var(--milky-purple);
+}
+
+.form-check-input {
+    margin-top: 0;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--dewy-purple);
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--classic-purple);
+    border-color: var(--classic-purple);
+}
+
+.form-check-input:focus {
+    border-color: var(--classic-purple);
+    box-shadow: 0 0 0 0.2rem rgba(118, 67, 147, 0.25);
+}
+
+.form-check-label {
+    margin-left: 0.75rem;
+    margin-bottom: 0;
+    cursor: pointer;
+    line-height: 1.5;
+    color: var(--mauve);
+}
+
+.form-check-label strong {
+    color: var(--royal-purple);
+    font-weight: 700;
+}
+
+/* Publication section styling */
+.bg-light.rounded {
+    background: linear-gradient(135deg, rgba(241, 236, 244, 0.4) 0%, rgba(213, 197, 222, 0.2) 100%) !important;
+    transition: all 0.2s ease;
+    border: 1px solid var(--dewy-purple);
+}
+
+.bg-light.rounded:hover {
+    background: linear-gradient(135deg, rgba(213, 197, 222, 0.4) 0%, rgba(241, 236, 244, 0.3) 100%) !important;
+    box-shadow: 0 4px 8px rgba(118, 67, 147, 0.1);
+}
+
+/* Loading overlay */
+#loadingOverlay {
+    background-color: rgba(94, 54, 118, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--milky-purple);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--classic-purple) 0%, var(--royal-purple) 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--royal-purple) 0%, var(--dynamic-purple) 100%);
+}
+
+/* Export button special styling */
+.export-btn-loading .spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .text-center.mb-4 h1 {
+        font-size: 2rem;
+    }
 }
 
 #uploadResult, #generateResult {

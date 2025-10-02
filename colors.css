@@ -1,0 +1,78 @@
+/* Website Color Palette */
+:root {
+  /* Purple Variants */
+  --classic-purple: #764393;
+  --royal-purple: #5E3676;
+  --dynamic-purple: #7D2882;
+  --milky-purple: #F1ECF4;
+  --dewy-purple: #D5C5DE;
+  --light-classic-purple: #874DA8;
+
+  /* Gold Variants */
+  --champagne-gold: #F1EBDE; /* RGB: 241, 236, 244 */
+  --classic-gold: #DFD0AA; /* RGB: 223, 208, 170 */
+  --dark-classic-gold: #D1BF92; /* RGB: 209, 191, 146 */
+  --light-royal-gold: #9C885C; /* RGB: 156, 136, 92 */
+  --royal-gold: #84754E; /* RGB: 132, 117, 78 */
+  --dark-royal-gold: #635636; /* RGB: 99, 86, 54 */
+  --dynamic-gold: #F0AA23;
+
+  /* Additional Colors */
+  --beaver: #A88C8B;
+  --lilac: #A395A2;
+  --mauve: #775B7A;
+  --amethyst: #7E678F;
+  --crocus: #7E759E;
+  --plum: #8F809F;
+  --fossil: #908B85;
+  --smoke: #7A8C8C;
+  --marble: #5F637D;
+}
+
+/* Alternative format using individual color classes */
+.classic-purple { color: var(--classic-purple); }
+.royal-purple { color: var(--royal-purple); }
+.dynamic-purple { color: var(--dynamic-purple); }
+.champagne-gold { color: var(--champagne-gold); }
+.classic-gold { color: var(--classic-gold); }
+.dark-classic-gold { color: var(--dark-classic-gold); }
+.light-royal-gold { color: var(--light-royal-gold); }
+.royal-gold { color: var(--royal-gold); }
+.dark-royal-gold { color: var(--dark-royal-gold); }
+.dynamic-gold { color: var(--dynamic-gold); }
+.milky-purple { color: var(--milky-purple); }
+.dewy-purple { color: var(--dewy-purple); }
+.light-classic-purple { color: var(--light-classic-purple); }
+.beaver { color: var(--beaver); }
+.lilac { color: var(--lilac); }
+.mauve { color: var(--mauve); }
+.amethyst { color: var(--amethyst); }
+.crocus { color: var(--crocus); }
+.plum { color: var(--plum); }
+.fossil { color: var(--fossil); }
+.smoke { color: var(--smoke); }
+.marble { color: var(--marble); }
+
+/* Background color utilities */
+.bg-classic-purple { background-color: var(--classic-purple); }
+.bg-royal-purple { background-color: var(--royal-purple); }
+.bg-dynamic-purple { background-color: var(--dynamic-purple); }
+.bg-champagne-gold { background-color: var(--champagne-gold); }
+.bg-classic-gold { background-color: var(--classic-gold); }
+.bg-dark-classic-gold { background-color: var(--dark-classic-gold); }
+.bg-light-royal-gold { background-color: var(--light-royal-gold); }
+.bg-royal-gold { background-color: var(--royal-gold); }
+.bg-dark-royal-gold { background-color: var(--dark-royal-gold); }
+.bg-dynamic-gold { background-color: var(--dynamic-gold); }
+.bg-milky-purple { background-color: var(--milky-purple); }
+.bg-dewy-purple { background-color: var(--dewy-purple); }
+.bg-light-classic-purple { background-color: var(--light-classic-purple); }
+.bg-beaver { background-color: var(--beaver); }
+.bg-lilac { background-color: var(--lilac); }
+.bg-mauve { background-color: var(--mauve); }
+.bg-amethyst { background-color: var(--amethyst); }
+.bg-crocus { background-color: var(--crocus); }
+.bg-plum { background-color: var(--plum); }
+.bg-fossil { background-color: var(--fossil); }
+.bg-smoke { background-color: var(--smoke); }
+.bg-marble { background-color: var(--marble); }
