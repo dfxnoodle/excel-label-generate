@@ -333,7 +333,7 @@ def create_label(c, data, x, y, width, height, config=None):
     # Reset font for other elements if they rely on a default after address drawing
     # Receipt number (in top right corner)
     raw_receive_id = data.get("RECEIVE_ID")
-    receive_id_str = (str(raw_receive_id) if pd.notna(raw_receive_id) else "").strip()
+    receive_id_str = (str(int(raw_receive_id)) if pd.notna(raw_receive_id) else "").strip()
     receipt_text = f"Rec. # {receive_id_str}" if receive_id_str else ""
     
     if receipt_text:
