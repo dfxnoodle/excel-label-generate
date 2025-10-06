@@ -10,6 +10,12 @@ import io
 import json
 import tempfile
 import numpy as np
+import shutil
+import time
+import asyncio
+from contextlib import asynccontextmanager
+from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Optional, List
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Request, BackgroundTasks
 from fastapi.responses import FileResponse, HTMLResponse
@@ -22,11 +28,87 @@ import pandas as pd
 from simple_labels import load_data_from_excel, generate_labels, load_config
 
 
-# Create FastAPI app
+# Create a persistent upload directory
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+# File cleanup configuration (in seconds)
+FILE_MAX_AGE = 3600  # 1 hour = 3600 seconds
+CLEANUP_INTERVAL = 300  # Run cleanup every 5 minutes
+
+# Global storage for tracking uploaded files (just filenames, actual files on disk)
+uploaded_files = set()
+
+# Load existing uploaded files on startup
+for file_path in UPLOAD_DIR.glob("*"):
+    if file_path.is_file():
+        uploaded_files.add(file_path.name)
+
+
+def cleanup_old_uploads():
+    """Remove uploaded files older than FILE_MAX_AGE seconds."""
+    try:
+        current_time = time.time()
+        cleaned_count = 0
+        
+        for file_path in UPLOAD_DIR.glob("*"):
+            # Skip .gitkeep and directories
+            if file_path.name == ".gitkeep" or not file_path.is_file():
+                continue
+            
+            # Check file age
+            file_age = current_time - file_path.stat().st_mtime
+            
+            if file_age > FILE_MAX_AGE:
+                try:
+                    file_path.unlink()
+                    uploaded_files.discard(file_path.name)
+                    cleaned_count += 1
+                    print(f"Cleaned up old file: {file_path.name} (age: {file_age:.0f}s)")
+                except Exception as e:
+                    print(f"Error cleaning up {file_path.name}: {e}")
+        
+        if cleaned_count > 0:
+            print(f"Cleanup complete: {cleaned_count} file(s) removed")
+        
+    except Exception as e:
+        print(f"Error during cleanup: {e}")
+
+
+async def periodic_cleanup():
+    """Background task to periodically clean up old files."""
+    while True:
+        await asyncio.sleep(CLEANUP_INTERVAL)
+        cleanup_old_uploads()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events."""
+    # Startup
+    print(f"Starting file cleanup service (max age: {FILE_MAX_AGE}s, interval: {CLEANUP_INTERVAL}s)")
+    # Clean up any old files from previous runs
+    cleanup_old_uploads()
+    # Start periodic cleanup task
+    cleanup_task = asyncio.create_task(periodic_cleanup())
+    
+    yield
+    
+    # Shutdown
+    print("Shutting down file cleanup service...")
+    cleanup_task.cancel()
+    try:
+        await cleanup_task
+    except asyncio.CancelledError:
+        pass
+
+
+# Create FastAPI app with lifespan
 app = FastAPI(
     title="Label Generator API",
     description="Web API for generating labels from Excel data",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Mount static files
@@ -55,8 +137,58 @@ class GenerateLabelsRequest(BaseModel):
     config: Optional[LabelConfig] = None
 
 
-# Global storage for uploaded files (in production, use proper storage)
-uploaded_files = {}
+# Create a persistent upload directory
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+# File cleanup configuration (in seconds)
+FILE_MAX_AGE = 3600  # 1 hour = 3600 seconds
+CLEANUP_INTERVAL = 300  # Run cleanup every 5 minutes
+
+# Global storage for tracking uploaded files (just filenames, actual files on disk)
+uploaded_files = set()
+
+# Load existing uploaded files on startup
+for file_path in UPLOAD_DIR.glob("*"):
+    if file_path.is_file():
+        uploaded_files.add(file_path.name)
+
+
+def cleanup_old_uploads():
+    """Remove uploaded files older than FILE_MAX_AGE seconds."""
+    try:
+        current_time = time.time()
+        cleaned_count = 0
+        
+        for file_path in UPLOAD_DIR.glob("*"):
+            # Skip .gitkeep and directories
+            if file_path.name == ".gitkeep" or not file_path.is_file():
+                continue
+            
+            # Check file age
+            file_age = current_time - file_path.stat().st_mtime
+            
+            if file_age > FILE_MAX_AGE:
+                try:
+                    file_path.unlink()
+                    uploaded_files.discard(file_path.name)
+                    cleaned_count += 1
+                    print(f"Cleaned up old file: {file_path.name} (age: {file_age:.0f}s)")
+                except Exception as e:
+                    print(f"Error cleaning up {file_path.name}: {e}")
+        
+        if cleaned_count > 0:
+            print(f"Cleanup complete: {cleaned_count} file(s) removed")
+        
+    except Exception as e:
+        print(f"Error during cleanup: {e}")
+
+
+async def periodic_cleanup():
+    """Background task to periodically clean up old files."""
+    while True:
+        await asyncio.sleep(CLEANUP_INTERVAL)
+        cleanup_old_uploads()
 
 
 def clean_data_for_json(data):
@@ -100,11 +232,16 @@ async def upload_excel_file(file: UploadFile = File(...)):
         # Read file content
         content = await file.read()
         
-        # Store file content in memory (in production, save to disk or cloud storage)
-        uploaded_files[file.filename] = content
+        # Save file to disk
+        file_path = UPLOAD_DIR / file.filename
+        with open(file_path, 'wb') as f:
+            f.write(content)
+        
+        # Track uploaded file
+        uploaded_files.add(file.filename)
         
         # Load and preview the data
-        df = pd.read_excel(io.BytesIO(content))
+        df = pd.read_excel(file_path)
         
         # Get sample data and clean it for JSON serialization
         sample_data = df.head(3).to_dict(orient='records')
@@ -127,7 +264,7 @@ async def upload_excel_file(file: UploadFile = File(...)):
 @app.get("/files")
 async def list_uploaded_files():
     """List all uploaded files."""
-    return {"files": list(uploaded_files.keys())}
+    return {"files": list(uploaded_files)}
 
 
 @app.post("/export-filtered")
@@ -138,63 +275,55 @@ async def export_filtered_excel(request: GenerateLabelsRequest, background_tasks
     if filename not in uploaded_files:
         raise HTTPException(status_code=404, detail="File not found. Please upload the file first.")
     
+    # Get the file path from disk
+    file_path = UPLOAD_DIR / filename
+    if not file_path.exists():
+        # File was tracked but doesn't exist on disk - remove from tracking
+        uploaded_files.discard(filename)
+        raise HTTPException(status_code=404, detail="File not found on disk. Please upload the file again.")
+    
     try:
-        # Create temporary file for processing
-        with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as temp_file:
-            temp_file.write(uploaded_files[filename])
-            temp_file_path = temp_file.name
+        # Load data with filters if provided
+        config_dict = request.config.dict() if request.config else {}
         
-        try:
-            # Load data with filters if provided
-            config_dict = request.config.dict() if request.config else {}
-            
-            df = load_data_from_excel(
-                temp_file_path,
-                category_filter=config_dict.get('category_filter'),
-                category_exclude_filter=config_dict.get('category_exclude_filter'),
-                status_filter=config_dict.get('status_filter'),
-                status_exclude_filter=config_dict.get('status_exclude_filter'),
-                mail_zone_filter=config_dict.get('mail_zone_filter'),
-                publication_columns=config_dict.get('publication_columns'),
-                filter_mode=config_dict.get('filter_mode', 'OR')
-            )
-            
-            if df is None or df.empty:
-                raise HTTPException(status_code=400, detail="No data found after applying filters")
-            
-            # Apply batch processing if specified
-            if config_dict.get('batch_size'):
-                start_idx = config_dict.get('start_index', 0)
-                end_idx = start_idx + config_dict['batch_size']
-                df = df.iloc[start_idx:end_idx]
-            elif config_dict.get('limit'):
-                df = df.head(config_dict['limit'])
-            
-            # Create temporary output file for filtered Excel
-            with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as output_file:
-                output_path = output_file.name
-            
-            # Export filtered data to Excel
-            df.to_excel(output_path, index=False, engine='openpyxl')
-            
-            # Schedule cleanup of temp files after response
-            background_tasks.add_task(os.unlink, output_path)
-            background_tasks.add_task(os.unlink, temp_file_path)
-            
-            # Return the Excel file
-            return FileResponse(
-                output_path,
-                media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                filename=f"filtered_{filename}"
-            )
-            
-        except Exception as inner_e:
-            # Clean up temporary input file on error
-            try:
-                os.unlink(temp_file_path)
-            except:
-                pass
-            raise inner_e
+        df = load_data_from_excel(
+            str(file_path),
+            category_filter=config_dict.get('category_filter'),
+            category_exclude_filter=config_dict.get('category_exclude_filter'),
+            status_filter=config_dict.get('status_filter'),
+            status_exclude_filter=config_dict.get('status_exclude_filter'),
+            mail_zone_filter=config_dict.get('mail_zone_filter'),
+            publication_columns=config_dict.get('publication_columns'),
+            filter_mode=config_dict.get('filter_mode', 'OR')
+        )
+        
+        if df is None or df.empty:
+            raise HTTPException(status_code=400, detail="No data found after applying filters")
+        
+        # Apply batch processing if specified
+        if config_dict.get('batch_size'):
+            start_idx = config_dict.get('start_index', 0)
+            end_idx = start_idx + config_dict['batch_size']
+            df = df.iloc[start_idx:end_idx]
+        elif config_dict.get('limit'):
+            df = df.head(config_dict['limit'])
+        
+        # Create temporary output file for filtered Excel
+        with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as output_file:
+            output_path = output_file.name
+        
+        # Export filtered data to Excel
+        df.to_excel(output_path, index=False, engine='openpyxl')
+        
+        # Schedule cleanup of temp output file after response
+        background_tasks.add_task(os.unlink, output_path)
+        
+        # Return the Excel file
+        return FileResponse(
+            output_path,
+            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            filename=f"filtered_{filename}"
+        )
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error exporting filtered data: {str(e)}")
@@ -208,82 +337,74 @@ async def generate_labels_endpoint(request: GenerateLabelsRequest, background_ta
     if filename not in uploaded_files:
         raise HTTPException(status_code=404, detail="File not found. Please upload the file first.")
     
+    # Get the file path from disk
+    file_path = UPLOAD_DIR / filename
+    if not file_path.exists():
+        # File was tracked but doesn't exist on disk - remove from tracking
+        uploaded_files.discard(filename)
+        raise HTTPException(status_code=404, detail="File not found on disk. Please upload the file again.")
+    
     try:
-        # Create temporary file for processing
-        with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as temp_file:
-            temp_file.write(uploaded_files[filename])
-            temp_file_path = temp_file.name
+        # Load data with filters if provided
+        config_dict = request.config.dict() if request.config else {}
         
-        try:
-            # Load data with filters if provided
-            config_dict = request.config.dict() if request.config else {}
-            
-            df = load_data_from_excel(
-                temp_file_path,
-                category_filter=config_dict.get('category_filter'),
-                category_exclude_filter=config_dict.get('category_exclude_filter'),
-                status_filter=config_dict.get('status_filter'),
-                status_exclude_filter=config_dict.get('status_exclude_filter'),
-                mail_zone_filter=config_dict.get('mail_zone_filter'),
-                publication_columns=config_dict.get('publication_columns'),
-                filter_mode=config_dict.get('filter_mode', 'OR')
-            )
-            
-            if df is None or df.empty:
-                raise HTTPException(status_code=400, detail="No data found or data could not be loaded")
-            
-            # Apply batch processing if specified
-            if config_dict.get('batch_size'):
-                start_idx = config_dict.get('start_index', 0)
-                end_idx = start_idx + config_dict['batch_size']
-                df = df.iloc[start_idx:end_idx]
-            elif config_dict.get('limit'):
-                df = df.head(config_dict['limit'])
-            
-            # Convert to records
-            records = df.to_dict(orient='records')
-            
-            # Create temporary output file
-            with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as output_file:
-                output_path = output_file.name
-            
-            # Load label configuration
-            config_path = "config/label_config.json"
-            
-            # Prepare config overrides for publication codes display
-            temp_config_overrides = {}
-            
-            # If publication_columns are specified, use them for display on labels
-            if config_dict.get('publication_columns'):
-                # The publication_columns from the request are the same as what should be displayed
-                # For example, if filtering by ["BE"], display "BE" codes on labels
-                temp_config_overrides['display_publication_codes_on_label'] = config_dict['publication_columns']
-            
-            # Generate labels with config overrides
-            generate_labels(records, output_path, config_file=config_path, temp_config_overrides=temp_config_overrides)
-            
-            # Check if file was created successfully
-            if not os.path.exists(output_path):
-                raise HTTPException(status_code=500, detail="Failed to generate labels")
-            
-            # Schedule cleanup of temp files after response
-            background_tasks.add_task(os.unlink, output_path)
-            background_tasks.add_task(os.unlink, temp_file_path)
-            
-            # Return the PDF file
-            return FileResponse(
-                output_path,
-                media_type='application/pdf',
-                filename=f"labels_{filename.split('.')[0]}.pdf"
-            )
-            
-        except Exception as inner_e:
-            # Clean up temporary input file on error
-            try:
-                os.unlink(temp_file_path)
-            except:
-                pass
-            raise inner_e
+        df = load_data_from_excel(
+            str(file_path),
+            category_filter=config_dict.get('category_filter'),
+            category_exclude_filter=config_dict.get('category_exclude_filter'),
+            status_filter=config_dict.get('status_filter'),
+            status_exclude_filter=config_dict.get('status_exclude_filter'),
+            mail_zone_filter=config_dict.get('mail_zone_filter'),
+            publication_columns=config_dict.get('publication_columns'),
+            filter_mode=config_dict.get('filter_mode', 'OR')
+        )
+        
+        if df is None or df.empty:
+            raise HTTPException(status_code=400, detail="No data found or data could not be loaded")
+        
+        # Apply batch processing if specified
+        if config_dict.get('batch_size'):
+            start_idx = config_dict.get('start_index', 0)
+            end_idx = start_idx + config_dict['batch_size']
+            df = df.iloc[start_idx:end_idx]
+        elif config_dict.get('limit'):
+            df = df.head(config_dict['limit'])
+        
+        # Convert to records
+        records = df.to_dict(orient='records')
+        
+        # Create temporary output file
+        with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as output_file:
+            output_path = output_file.name
+        
+        # Load label configuration
+        config_path = "config/label_config.json"
+        
+        # Prepare config overrides for publication codes display
+        temp_config_overrides = {}
+        
+        # If publication_columns are specified, use them for display on labels
+        if config_dict.get('publication_columns'):
+            # The publication_columns from the request are the same as what should be displayed
+            # For example, if filtering by ["BE"], display "BE" codes on labels
+            temp_config_overrides['display_publication_codes_on_label'] = config_dict['publication_columns']
+        
+        # Generate labels with config overrides
+        generate_labels(records, output_path, config_file=config_path, temp_config_overrides=temp_config_overrides)
+        
+        # Check if file was created successfully
+        if not os.path.exists(output_path):
+            raise HTTPException(status_code=500, detail="Failed to generate labels")
+        
+        # Schedule cleanup of temp output file after response
+        background_tasks.add_task(os.unlink, output_path)
+        
+        # Return the PDF file
+        return FileResponse(
+            output_path,
+            media_type='application/pdf',
+            filename=f"labels_{filename.split('.')[0]}.pdf"
+        )
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating labels: {str(e)}")
@@ -343,6 +464,78 @@ async def reset_config():
 async def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "message": "Label Generator API is running"}
+
+
+@app.get("/cleanup/status")
+async def cleanup_status():
+    """Get status of uploaded files and cleanup configuration."""
+    try:
+        current_time = time.time()
+        files_info = []
+        
+        for file_path in UPLOAD_DIR.glob("*"):
+            if file_path.is_file() and file_path.name != ".gitkeep":
+                age = current_time - file_path.stat().st_mtime
+                size = file_path.stat().st_size
+                will_be_deleted = age > FILE_MAX_AGE
+                time_until_deletion = max(0, FILE_MAX_AGE - age)
+                
+                files_info.append({
+                    "filename": file_path.name,
+                    "age_seconds": int(age),
+                    "age_formatted": f"{age/3600:.1f} hours" if age >= 3600 else f"{age/60:.1f} minutes",
+                    "size_bytes": size,
+                    "size_formatted": f"{size/1024:.1f} KB" if size >= 1024 else f"{size} bytes",
+                    "will_be_deleted": will_be_deleted,
+                    "time_until_deletion": int(time_until_deletion) if not will_be_deleted else 0,
+                    "time_until_deletion_formatted": f"{time_until_deletion/60:.1f} minutes" if time_until_deletion < 3600 else f"{time_until_deletion/3600:.1f} hours"
+                })
+        
+        return {
+            "config": {
+                "max_file_age_seconds": FILE_MAX_AGE,
+                "max_file_age_formatted": f"{FILE_MAX_AGE/3600:.1f} hours",
+                "cleanup_interval_seconds": CLEANUP_INTERVAL,
+                "cleanup_interval_formatted": f"{CLEANUP_INTERVAL/60:.1f} minutes"
+            },
+            "files": files_info,
+            "total_files": len(files_info),
+            "files_to_be_deleted": sum(1 for f in files_info if f["will_be_deleted"])
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting cleanup status: {str(e)}")
+
+
+@app.post("/cleanup/run")
+async def run_cleanup_now():
+    """Manually trigger file cleanup."""
+    try:
+        current_time = time.time()
+        cleaned_files = []
+        
+        for file_path in UPLOAD_DIR.glob("*"):
+            if file_path.name == ".gitkeep" or not file_path.is_file():
+                continue
+            
+            file_age = current_time - file_path.stat().st_mtime
+            
+            if file_age > FILE_MAX_AGE:
+                try:
+                    file_path.unlink()
+                    uploaded_files.discard(file_path.name)
+                    cleaned_files.append({
+                        "filename": file_path.name,
+                        "age_seconds": int(file_age)
+                    })
+                except Exception as e:
+                    print(f"Error cleaning up {file_path.name}: {e}")
+        
+        return {
+            "message": f"Cleanup completed: {len(cleaned_files)} file(s) removed",
+            "cleaned_files": cleaned_files
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error running cleanup: {str(e)}")
 
 
 # Note: When running directly via python src/web_app.py, this will use default settings.

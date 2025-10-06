@@ -147,6 +147,8 @@ Thumbs.db
 # Project specific
 output/*.pdf
 !output/.gitkeep
+uploads/
+!uploads/.gitkeep
 
 # Temporary files
 *.tmp
