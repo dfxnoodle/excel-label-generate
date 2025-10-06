@@ -77,6 +77,13 @@ async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+@app.get("/favicon.ico")
+async def favicon():
+    """Serve the favicon."""
+    from fastapi.responses import FileResponse
+    return FileResponse("icon/favicon.ico")
+
+
 @app.get("/config-page", response_class=HTMLResponse)
 async def config_page(request: Request):
     """Serve the configuration management page."""
