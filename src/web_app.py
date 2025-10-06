@@ -87,8 +87,9 @@ async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     # Startup
     print(f"Starting file cleanup service (max age: {FILE_MAX_AGE}s, interval: {CLEANUP_INTERVAL}s)")
-    # Clean up any old files from previous runs
-    cleanup_old_uploads()
+    # Don't clean up files on startup - only run periodic cleanup
+    # This allows recently uploaded files to persist across restarts
+    print(f"Found {len(uploaded_files)} existing file(s) in upload directory")
     # Start periodic cleanup task
     cleanup_task = asyncio.create_task(periodic_cleanup())
     
