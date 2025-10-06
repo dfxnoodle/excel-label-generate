@@ -9,6 +9,7 @@ python-barcode>=0.14.0
 # Web API dependencies
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
+gunicorn>=23.0.0
 python-multipart>=0.0.6
 jinja2>=3.1.2
 reportlab>=4.4.3

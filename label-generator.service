@@ -1,4 +1,4 @@
-# Systemd service file for Label Generator
+# Systemd service file for Label Generator (Gunicorn + Unix Socket)
 # Place this file in /etc/systemd/system/label-generator.service
 # 
 # Installation:
@@ -19,11 +19,11 @@ After=network.target
 
 [Service]
 Type=simple
-User=www-data
-Group=www-data
-WorkingDirectory=/path/to/excel-label-generate
-Environment="PATH=/path/to/excel-label-generate/.venv/bin"
-ExecStart=/path/to/excel-label-generate/.venv/bin/python /path/to/excel-label-generate/run_web_socket.py --socket /tmp/label-generator.sock --workers 4
+User=dinochlai
+Group=dinochlai
+WorkingDirectory=/home/dinochlai/excel-label-generate
+Environment="PATH=/home/dinochlai/excel-label-generate/.venv/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/dinochlai/excel-label-generate/.venv/bin/python /home/dinochlai/excel-label-generate/run_gunicorn_socket.py --socket /tmp/label-generator.sock --workers 4 --mode 0o666
 
 # Restart policy
 Restart=always
@@ -31,7 +31,8 @@ RestartSec=10
 
 # Security settings
 NoNewPrivileges=true
-PrivateTmp=true
+# NOTE: PrivateTmp=true would isolate /tmp, preventing Nginx from accessing the socket
+# PrivateTmp=true  # DISABLED - socket needs to be accessible to Nginx
 
 # Logging
 StandardOutput=journal
