@@ -1,0 +1,45 @@
+# Systemd service file for Label Generator
+# Place this file in /etc/systemd/system/label-generator.service
+# 
+# Installation:
+#   sudo cp label-generator.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable label-generator
+#   sudo systemctl start label-generator
+#
+# Management:
+#   sudo systemctl status label-generator
+#   sudo systemctl restart label-generator
+#   sudo systemctl stop label-generator
+#   sudo journalctl -u label-generator -f
+
+[Unit]
+Description=CUHK Label Generator Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/path/to/excel-label-generate
+Environment="PATH=/path/to/excel-label-generate/.venv/bin"
+ExecStart=/path/to/excel-label-generate/.venv/bin/python /path/to/excel-label-generate/run_web_socket.py --socket /tmp/label-generator.sock --workers 4
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=label-generator
+
+# Resource limits
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

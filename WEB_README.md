@@ -97,6 +97,29 @@ cd src
 uvicorn web_app:app --host 0.0.0.0 --port 8000 --reload
 ```
 
+### Option 4: Production Deployment with Unix Socket
+
+For production deployments with Nginx or Apache, use the Unix socket mode:
+
+```bash
+# Run with default Unix socket
+python run_web_socket.py
+
+# Run with custom socket path
+python run_web_socket.py --socket /var/run/label-generator.sock
+
+# Run as systemd service (production)
+sudo systemctl start label-generator
+
+# See full deployment guide
+```
+
+📖 **See [UNIX_SOCKET_DEPLOYMENT.md](UNIX_SOCKET_DEPLOYMENT.md) for complete deployment instructions including:**
+- Nginx reverse proxy configuration
+- Systemd service setup
+- SSL/HTTPS with Let's Encrypt
+- Production security and performance tuning
+
 ## Accessing the Application
 
 ### From the Same Computer
