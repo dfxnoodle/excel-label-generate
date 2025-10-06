@@ -10,6 +10,7 @@ import sys
 import os
 import argparse
 import uvicorn
+import stat
 
 # Add src directory to Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -116,14 +117,31 @@ Nginx configuration example:
         print(f"✓ Starting server on Unix socket: {args.socket}")
         print()
         
-        # Run uvicorn with Unix socket
-        uvicorn.run(
-            app,
-            uds=args.socket,  # Unix Domain Socket
+        # Configure uvicorn server
+        config = uvicorn.Config(
+            app="src.web_app:app" if args.reload else app,
+            uds=args.socket,
             reload=args.reload,
-            workers=args.workers if not args.reload else 1,  # reload mode doesn't support workers
-            log_level="info"
+            workers=args.workers if not args.reload else 1,
+            log_level="info",
         )
+        
+        # Create and run server
+        server = uvicorn.Server(config)
+        
+        # Set socket file permissions after server creates it
+        # We need to do this in the server's startup
+        original_startup = server.startup
+        async def startup_with_permissions(*args_list, **kwargs):
+            await original_startup(*args_list, **kwargs)
+            if os.path.exists(args.socket):
+                os.chmod(args.socket, socket_mode)
+                print(f"✓ Set socket permissions to {oct(socket_mode)}")
+        
+        server.startup = startup_with_permissions
+        
+        # Run the server (this blocks until stopped)
+        server.run()
     except ImportError as e:
         print(f"❌ Error importing application: {e}")
         print("Make sure all dependencies are installed:")
