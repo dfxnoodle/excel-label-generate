@@ -9,7 +9,7 @@ This is the web version of the Label Generator application, built with FastAPI. 
 - **Excel File Upload**: Support for `.xlsx` and `.xls` files
 - **Data Preview**: View sample data from uploaded files
 - **Flexible Filtering**: Filter data by categories, status, mail zones, and publications
-- **Publication Filters**: Filter by Bulletin subscriptions (BE, BC, BEC)
+- **Publication Filters**: Filter by Bulletin subscriptions (BE, BC)
 - **Batch Processing**: Generate labels in batches or limit the number of labels
 - **Export Filtered Data**: Export filtered Excel data before generating labels
 - **PDF Download**: Automatically download generated label PDFs

@@ -382,8 +382,8 @@ def create_label(c, data, x, y, width, height, config=None):
                     continue
 
         if publications_with_copies:
-            # Join all publications with " + " separator
-            prefix = " + ".join(publications_with_copies)
+            # Join all publications with " "
+            prefix = " ".join(publications_with_copies)
             if custom_right_text:
                 final_right_text = f"{prefix} {custom_right_text}"
             else:
@@ -525,10 +525,9 @@ def load_config(config_file=None):
             "5": "All others"
         },
         "publication_options_map": {
-            "Annual Report (English Only)": {"data_columns": ["AR"], "label_codes": ["AR"]},
+            "Annual Report": {"data_columns": ["AR"], "label_codes": ["AR"]},
             "Bulletin (English Only)": {"data_columns": ["BE"], "label_codes": ["BE"]},
             "Bulletin (Chinese Only)": {"data_columns": ["BC"], "label_codes": ["BC"]},
-            "Bulletin (Chinese & English)": {"data_columns": ["BEC"], "label_codes": ["BEC"]},
             "Facts and Figures (English Only)": {"data_columns": ["FFE"], "label_codes": ["FFE"]},
             "Facts and Figures (Chinese Only)": {"data_columns": ["FFC"], "label_codes": ["FFC"]}
         },

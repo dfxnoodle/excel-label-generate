@@ -295,7 +295,7 @@ function getConfigFromForm() {
     const publicationColumns = [];
     if (document.getElementById('pubBE').checked) publicationColumns.push('BE');
     if (document.getElementById('pubBC').checked) publicationColumns.push('BC');
-    if (document.getElementById('pubBEC').checked) publicationColumns.push('BEC');
+    if (document.getElementById('pubAR').checked) publicationColumns.push('AR');
     if (publicationColumns.length > 0) config.publication_columns = publicationColumns;
     
     const limitNumber = document.getElementById('limitNumber').value;

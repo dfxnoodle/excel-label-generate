@@ -9,7 +9,7 @@
 
 **Implementation:**
 - Added Custom Text Settings section in main interface
-- Checkboxes for BE (Bulletin English), BC (Bulletin Chinese), BEC (Bulletin English & Chinese)
+- Checkboxes for BE (Bulletin English), BC (Bulletin Chinese)
 - Filters recipients based on positive subscription numbers (≥1) in publication columns
 - Modal help dialog explaining publication filtering
 - Integration with existing filter system
@@ -151,12 +151,12 @@ python run_web.py --port 8080 --reload
 ## Next Steps / Recommendations
 
 1. **Testing:**
-   - Test with actual Excel data containing BE, BC, BEC columns
+   - Test with actual Excel data containing BE, BC columns
    - Verify network access from different devices
    - Test configuration changes with different field combinations
 
 2. **Possible Enhancements:**
-   - Add more publication columns (ARE, ARC, etc.) if needed
+   - Add more publication columns (FFE, FFC, etc.) if needed
    - Add real-time preview of label changes in config page
    - Add export format options (CSV, JSON, etc.)
 

@@ -56,9 +56,9 @@ Apply filters to select specific records:
   - `4` = China, Taiwan, Macau
   - `5` = All others (International)
 - **Custom Text Settings - Individual Publications**: Filter by publication subscriptions
-  - **BE**: Bulletin English - Only recipients subscribed to English bulletin
-  - **BC**: Bulletin Chinese - Only recipients subscribed to Chinese bulletin
-  - **BEC**: Bulletin English & Chinese - Recipients subscribed to bilingual bulletin
+    - **BE**: Bulletin English - Recipients subscribed to English bulletin
+  - **BC**: Bulletin Chinese - Recipients subscribed to Chinese bulletin
+
   - Numbers in these columns indicate copies to send (≥1 = subscribed)
   - Check one or more to include recipients subscribed to any selected publication
   - Leave all unchecked to ignore publication filtering

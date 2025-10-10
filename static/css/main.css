@@ -142,7 +142,8 @@ body {
 
 .btn-outline-secondary {
     border: 2px solid var(--dewy-purple);
-    color: rgb(255, 254, 254);
+    color: var(--royal-purple);
+    background-color: white;
     font-weight: 600;
     transition: all 0.3s ease;
 }
@@ -150,7 +151,7 @@ body {
 .btn-outline-secondary:hover {
     background-color: var(--dewy-purple);
     border-color: var(--classic-purple);
-    color: rgb(255, 254, 254);
+    color: var(--royal-purple);
 }
 
 /* Alert Styling */

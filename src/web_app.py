@@ -546,4 +546,5 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 8000))
     print(f"Starting server on port {port}...")
     print(f"For flexible port configuration, use: python run_web.py --port <PORT>")
-    uvicorn.run(app, host="0.0.0.0", port=port, reload=True)
+    # Use import string for reload to work properly
+    uvicorn.run("web_app:app", host="0.0.0.0", port=port, reload=True)

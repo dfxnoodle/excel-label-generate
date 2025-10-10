@@ -41,7 +41,7 @@ generate_labels(records, output_path, config_file=config_path, temp_config_overr
 Modified the bulletin section (around line 402-442) to:
 
 1. Check `display_publication_codes_on_label` config to determine which columns to check
-2. Look for copy counts in the specified columns (BE, BC, BEC, etc.)
+2. Look for copy counts in the specified columns (BE, BC, etc.)
 3. **Actually use** the calculated copies number to override `bulletin_number_text`
 4. Display it as "Rec. # {count}"
 
@@ -50,10 +50,10 @@ Modified the bulletin section (around line 402-442) to:
 display_codes = config.get("display_publication_codes_on_label")
 if display_codes:
     # Only check the columns specified in display_publication_codes_on_label
-    possible_bulletin_columns = [col for col in display_codes if col in ['BE', 'BC', 'BEC', 'AR', 'FFE', 'FFC']]
+    possible_bulletin_columns = [col for col in display_codes if col in ['BE', 'BC', 'AR', 'FFE', 'FFC']]
 else:
     # Default: check all bulletin columns
-    possible_bulletin_columns = ['BE', 'BC', 'BEC']
+    possible_bulletin_columns = ['BE', 'BC']
 
 copies_no = None
 for col in possible_bulletin_columns:
@@ -79,12 +79,12 @@ if copies_no is not None:
 ## How It Works Now
 
 ### Center-Right Panel Display:
-1. User selects publication types in the web interface (e.g., checks BE, BC, BEC)
-2. JavaScript sends `publication_columns: ["BE", "BC", "BEC"]` in the request
-3. Web app maps this to `display_publication_codes_on_label: ["BE", "BC", "BEC"]`
+1. User selects publication types in the web interface (e.g., checks BE, BC)
+2. JavaScript sends `publication_columns: ["BE", "BC"]` in the request
+3. Web app maps this to `display_publication_codes_on_label: ["BE", "BC"]`
 4. Label generator checks each data row for these columns
 5. If a column has a value >= 1, it displays: `{value} {column_name} {custom_text}`
-6. Example output in center: **"2 BE E"** or **"1 BEC E"**
+6. Example output in center: **"2 BE E"** or **"1 BC C"**
 
 ### Bottom "Bulletin Rec. #" Display:
 1. The same logic checks for copy counts in the specified columns
@@ -108,8 +108,8 @@ For a record with BE=2:
 To test the fix:
 
 1. Start the web server: `python run_web.py` or `./run_web.sh`
-2. Upload an Excel file with BE, BC, BEC columns containing numeric values (e.g., 1, 2, 3)
-3. Select one or more publication types (BE, BC, or BEC) in the filter
+2. Upload an Excel file with BE, BC columns containing numeric values (e.g., 1, 2, 3)
+3. Select one or more publication types (BE or BC) in the filter
 4. Generate labels
 5. The PDF should now show:
    - Center-right: Copy count + publication code + custom text (e.g., "2 BE E")

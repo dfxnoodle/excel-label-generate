@@ -63,16 +63,25 @@ if __name__ == "__main__":
     print()
     
     try:
-        # Import the app to verify it works
-        from web_app import app
-        print("✓ Application loaded successfully")
-        
-        uvicorn.run(
-            app, 
-            host=args.host, 
-            port=args.port, 
-            reload=args.reload
-        )
+        # When using reload, we need to pass the app as an import string
+        if args.reload:
+            # Pass as import string for reload to work properly
+            uvicorn.run(
+                "web_app:app",
+                host=args.host,
+                port=args.port,
+                reload=True
+            )
+        else:
+            # Import and pass the app object directly when not reloading
+            from web_app import app
+            print("✓ Application loaded successfully")
+            uvicorn.run(
+                app,
+                host=args.host,
+                port=args.port,
+                reload=False
+            )
     except ImportError as e:
         print(f"❌ Error importing application: {e}")
         print("Make sure all dependencies are installed:")
