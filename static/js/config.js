@@ -70,6 +70,11 @@ function populateConfigForm(config) {
         document.getElementById('annotationFontSize').value = fonts.annotation_font.size || 8;
     }
     
+    if (fonts.publication) {
+        document.getElementById('publicationFontName').value = fonts.publication.name || 'Helvetica-Bold';
+        document.getElementById('publicationFontSize').value = fonts.publication.size || 14;
+    }
+    
     // Colors
     const colors = config.colors || {};
     document.getElementById('textColor').value = colors.text || '#000000';
@@ -179,6 +184,11 @@ function collectConfigFromForm() {
     config.fonts.annotation_font = {
         name: document.getElementById('annotationFontName').value,
         size: parseInt(document.getElementById('annotationFontSize').value)
+    };
+    
+    config.fonts.publication = {
+        name: document.getElementById('publicationFontName').value,
+        size: parseInt(document.getElementById('publicationFontSize').value)
     };
     
     // Colors

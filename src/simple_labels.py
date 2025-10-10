@@ -175,17 +175,15 @@ def create_label(c, data, x, y, width, height, config=None):
     # Define default font styles if not found in config
     default_title_font = {"name": "Helvetica-Bold", "size": 10}
     default_body_font = {"name": "Helvetica", "size": 9}
-    # For the prominent right panel text, use title font by default, or a larger bold font
-    default_emphasis_font = fonts_config.get("title", {"name": "Helvetica-Bold", "size": 14}).copy() # Use title or a default emphasis
-    if "size" in default_emphasis_font: # Ensure it's a bit larger if using title font as base
-        default_emphasis_font["size"] = max(default_emphasis_font.get("size", 10), 14) # Ensure it's at least 14, or title_size + 4 logic
-    else: # Fallback if title font is malformed or size is missing
-        default_emphasis_font["name"] = default_emphasis_font.get("name", "Helvetica-Bold")
-        default_emphasis_font["size"] = 14
+    default_publication_font = {"name": "Helvetica-Bold", "size": 14}
+    
+    # For the prominent right panel text (publication codes like BE/BC/AR), use publication font
+    publication_font_config = fonts_config.get("publication", default_publication_font)
 
     title_font_config = fonts_config.get("title", default_title_font)
     body_font_config = fonts_config.get("body", default_body_font)
-    emphasis_font_config = default_emphasis_font # As derived above
+    # Keep emphasis_font_config for backward compatibility, but use publication_font_config for publication codes
+    emphasis_font_config = publication_font_config
 
     # Determine address font (prefer CJK font if registered and configured)
     address_font_name = body_font_config.get("name", default_body_font["name"])
@@ -348,11 +346,11 @@ def create_label(c, data, x, y, width, height, config=None):
     
     # Draw 'E' or custom text in center of right side
     try:
-        # Use emphasis_font_config for the right panel's main text
-        c.setFont(emphasis_font_config.get("name", default_emphasis_font["name"]), 
-                  emphasis_font_config.get("size", default_emphasis_font["size"]))
+        # Use publication_font_config for the right panel's main text (BE/BC/AR codes)
+        c.setFont(publication_font_config.get("name", default_publication_font["name"]), 
+                  publication_font_config.get("size", default_publication_font["size"]))
     except:
-        c.setFont(default_emphasis_font["name"], default_emphasis_font["size"]) # Fallback
+        c.setFont(default_publication_font["name"], default_publication_font["size"]) # Fallback
     
     right_center_x = divider_x + ((width * 0.25) / 2)
     right_center_y = y + height - (height / 2)
@@ -394,8 +392,8 @@ def create_label(c, data, x, y, width, height, config=None):
              final_right_text = "" # Ensure it's an empty string, not None
 
     text_width = c.stringWidth(final_right_text, 
-                               emphasis_font_config.get("name", default_emphasis_font["name"]), 
-                               emphasis_font_config.get("size", default_emphasis_font["size"]))
+                               publication_font_config.get("name", default_publication_font["name"]), 
+                               publication_font_config.get("size", default_publication_font["size"]))
     text_x = right_center_x - (text_width / 2)
     c.drawString(text_x, right_center_y, final_right_text)
     
@@ -457,7 +455,8 @@ def load_config(config_file=None):
             "title": {"name": "Helvetica-Bold", "size": 10},
             "body": {"name": "Helvetica", "size": 9},
             "footer": {"name": "Helvetica", "size": 8},
-            "cjk": {"name": "SimSun", "file": "SimSun.ttf", "size": 9}
+            "cjk": {"name": "SimSun", "file": "SimSun.ttf", "size": 9},
+            "publication": {"name": "Helvetica-Bold", "size": 14}
         },
         "colors": {
             "header": "#000000",

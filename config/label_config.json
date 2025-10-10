@@ -30,6 +30,10 @@
             "size": 9,
             "file": "SimSun.ttf"
         },
+        "publication": {
+            "name": "Helvetica-Bold",
+            "size": 12
+        },
         "annotation_font": {
             "name": "Helvetica",
             "size": 8
@@ -102,7 +106,7 @@
         "5": "All others"
     },
     "publication_options_map": {
-        "Annual Report (English Only)": {
+        "Annual Report": {
             "data_columns": [
                 "AR"
             ],
@@ -126,14 +130,6 @@
                 "BC"
             ]
         },
-        "Bulletin (Chinese & English)": {
-            "data_columns": [
-                "BEC"
-            ],
-            "label_codes": [
-                "BEC"
-            ]
-        },
         "Facts and Figures (English Only)": {
             "data_columns": [
                 "FFE"
@@ -148,6 +144,22 @@
             ],
             "label_codes": [
                 "FFC"
+            ]
+        },
+        "Annual Report (English Only)": {
+            "data_columns": [
+                "AR"
+            ],
+            "label_codes": [
+                "AR"
+            ]
+        },
+        "Bulletin (Chinese & English)": {
+            "data_columns": [
+                "BEC"
+            ],
+            "label_codes": [
+                "BEC"
             ]
         }
     },
