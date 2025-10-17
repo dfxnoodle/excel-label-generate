@@ -48,8 +48,8 @@
     },
     "show_border": false,
     "border_width": 0.1,
-    "bulletin_text": "Testing",
-    "bulletin_number_text": "10/2025",
+    "bulletin_text": "CU Bulletin",
+    "bulletin_number_text": "No.1 2025",
     "custom_right_panel_text": "",
     "category_map": {
         "C_acd": "Academic Units",

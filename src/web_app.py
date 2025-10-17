@@ -34,7 +34,7 @@ UPLOAD_DIR.mkdir(exist_ok=True)
 
 # File cleanup configuration (in seconds)
 FILE_MAX_AGE = 3600  # 1 hour = 3600 seconds
-CLEANUP_INTERVAL = 300  # Run cleanup every 5 minutes
+CLEANUP_INTERVAL = 1800  # Run cleanup every 30 minutes
 
 # Global storage for tracking uploaded files (just filenames, actual files on disk)
 uploaded_files = set()
