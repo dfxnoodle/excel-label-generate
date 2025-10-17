@@ -241,8 +241,10 @@ def create_label(c, data, x, y, width, height, config=None):
     
     # ---------- LEFT SIDE CONTENT ----------
     person_name = ""
+    post_line = ""  # Store post separately to add as first address line
+    
     if selected_fields:
-        recipient_field_order = ["TITLE1", "NAME1", "surname", "post"]
+        recipient_field_order = ["TITLE1", "NAME1", "surname"]
         person_name_parts = []
         for key in recipient_field_order:
             if key in selected_fields:
@@ -251,11 +253,13 @@ def create_label(c, data, x, y, width, height, config=None):
                 field_str = (str(raw_val) if pd.notna(raw_val) else "").strip()
                 
                 if field_str: # Process only if there's actual content
-                    if key == "post" and person_name_parts: 
-                         person_name_parts.append(f"({field_str})")
-                    else:
-                        person_name_parts.append(field_str)
+                    person_name_parts.append(field_str)
         person_name = " ".join(person_name_parts).strip()
+        
+        # Handle post separately - it will be added as the first address line
+        if "post" in selected_fields:
+            raw_post = data.get("post")
+            post_line = (str(raw_post) if pd.notna(raw_post) else "").strip()
     else: # Fallback to original logic if selected_fields not provided
         person_name_parts_fallback = []
         
@@ -300,6 +304,11 @@ def create_label(c, data, x, y, width, height, config=None):
     c.setFillColor(body_color)
     
     address_lines = []
+    
+    # Add post as the first line if it exists
+    if post_line:
+        address_lines.append(post_line)
+    
     if selected_fields:
         # Define the order in which address fields should appear on the label
         address_field_order = ["sub_unit", "sub_unit_chi", "UNIT_NAME", "unit_name_chi", "co_name", "co_name_chi", "add1", "add2", "state"]

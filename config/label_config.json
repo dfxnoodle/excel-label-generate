@@ -247,11 +247,11 @@
         "TITLE1",
         "NAME1",
         "surname",
-        "co_name",
-        "UNIT_NAME",
+        "post",
         "sub_unit",
+        "UNIT_NAME",
+        "co_name",
         "add1",
-        "add2",
-        "state"
+        "add2"
     ]
 }
