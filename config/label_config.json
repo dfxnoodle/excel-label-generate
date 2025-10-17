@@ -189,14 +189,14 @@
             "group": "recipient"
         },
         {
-            "key": "co_name",
-            "label": "Company Name",
+            "key": "sub_unit",
+            "label": "Sub Unit",
             "default": 0,
             "group": "address"
         },
         {
-            "key": "co_name_chi",
-            "label": "Company Name (Chi)",
+            "key": "sub_unit_chi",
+            "label": "Sub Unit (Chi)",
             "default": 0,
             "group": "address"
         },
@@ -213,14 +213,14 @@
             "group": "address"
         },
         {
-            "key": "sub_unit",
-            "label": "Sub Unit",
+            "key": "co_name",
+            "label": "Company Name",
             "default": 0,
             "group": "address"
         },
         {
-            "key": "sub_unit_chi",
-            "label": "Sub Unit (Chi)",
+            "key": "co_name_chi",
+            "label": "Company Name (Chi)",
             "default": 0,
             "group": "address"
         },
@@ -247,7 +247,6 @@
         "TITLE1",
         "NAME1",
         "surname",
-        "post",
         "co_name",
         "UNIT_NAME",
         "sub_unit",
