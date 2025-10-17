@@ -247,7 +247,10 @@
         "TITLE1",
         "NAME1",
         "surname",
+        "post",
+        "co_name",
         "UNIT_NAME",
+        "sub_unit",
         "add1",
         "add2",
         "state"

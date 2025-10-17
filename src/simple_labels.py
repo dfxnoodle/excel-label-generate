@@ -302,7 +302,7 @@ def create_label(c, data, x, y, width, height, config=None):
     address_lines = []
     if selected_fields:
         # Define the order in which address fields should appear on the label
-        address_field_order = ["co_name", "co_name_chi", "UNIT_NAME", "unit_name_chi", "sub_unit", "sub_unit_chi", "add1", "add2", "state"]
+        address_field_order = ["sub_unit", "sub_unit_chi", "UNIT_NAME", "unit_name_chi", "co_name", "co_name_chi", "add1", "add2", "state"]
         for key in address_field_order:
             if key in selected_fields:
                 raw_val = data.get(key)
