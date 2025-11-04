@@ -1,12 +1,12 @@
 {
     "page_size": "A4",
-    "margin_top": 2,
-    "margin_bottom": 0.5,
-    "margin_left": 9,
-    "margin_right": 9,
+    "margin_top": 1,
+    "margin_bottom": 1,
+    "margin_left": 3,
+    "margin_right": 3,
     "columns": 2,
     "rows": 8,
-    "label_width": 95,
+    "label_width": 103,
     "label_height": 30,
     "fonts": {
         "header": {
@@ -32,7 +32,7 @@
         },
         "publication": {
             "name": "Helvetica-Bold",
-            "size": 12
+            "size": 8
         },
         "annotation_font": {
             "name": "Helvetica",
@@ -252,6 +252,7 @@
         "UNIT_NAME",
         "co_name",
         "add1",
-        "add2"
+        "add2",
+        "state"
     ]
 }
